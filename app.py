@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 from subprocess import Popen, PIPE
 from flask_socketio import SocketIO
 
 
 pipe = Popen(["cat", "/etc/hostname"], stdout=PIPE)
-text = pipe.communicate()[0]
+hostname = pipe.communicate()[0]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gotocats'
@@ -12,7 +12,8 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def hello():
-    return "Hello World! " + text
+    return render_template('hello.html', container = hostname)
+
 
 
 if __name__ == '__main__':
